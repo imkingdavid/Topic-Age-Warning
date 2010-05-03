@@ -1,0 +1,34 @@
+=========================
+	Topic Age Warning
+	   imkingdavid
+	      v1.0.0
+=========================
+
+This phpBB MOD displays a warning
+ to users who attempt to reply to
+ a topic that is older than the
+ specified time limit.
+ 
+(Eventually) can be set to lock the
+ topic when the user attempts to reply.
+ Otherwise, it will just show the warning.
+ 
+To install (w/o AutoMOD):
+	1) Backup your forum database and files
+	2) Open install.xml in your web browser
+	3) Perform all file edits
+	4) Save, close, and upload the changed files
+		(overwrite old files).
+	5) Run and then delete SQL install file
+	6) Test MOD to make sure it runs properly.
+	7) If it does not function properly, replace the changed
+		files with the backed up files.
+To install (w/ AutoMOD):
+	1) Backup your forum database and files
+	2) Go to your ACP and click the AutoMOD tab
+	3) Scroll down and click browse
+	4) Select the .zip package of the MOD
+	5) Run installation
+	6) Run and then delete SQL install script
+	7) Test MOD to make sure it runs properly.
+	8) If it does not function properly, use AutoMOD's uninstall feature
