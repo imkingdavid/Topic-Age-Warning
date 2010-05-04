@@ -47,19 +47,15 @@
 		<edit>
 			<find><![CDATA[	'TOPIC'				=> 'Topic',
 	'TOPICS'			=> 'Topics',]]></find>
-			<action type="after-add"><![CDATA[	//! Topic Age Warning - imkingdavid
+			<action type="after-add"><![CDATA[//! Topic Age Warning - imkingdavid
 	'TOPIC_AGE_WARNING'	=> 'You are attempting to reply to a topic that is %s old. Instead, please begin a new topic, or search for another related topic that may be more suitable.',
+	'TOPIC_AGE_WARNING_LOCK'	=> 'This topic is %s old. The forum administrator has chosen for old topics to be locked when a reply is attempted. Please begin a new topic or use the search feature to find a similar but newer topic.',
 	//! END Topic Age Warning - imkingdavid]]></action>
 		</edit>
 	</open>
 	<open src="posting.php">
 		<edit>
-			<find><![CDATA[// Forum/Topic locked?
-if (($post_data['forum_status'] == ITEM_LOCKED || (isset($post_data['topic_status']) && $post_data['topic_status'] == ITEM_LOCKED)) && !$auth->acl_get('m_edit', $forum_id))
-{
-	trigger_error(($post_data['forum_status'] == ITEM_LOCKED) ? 'FORUM_LOCKED' : 'TOPIC_LOCKED');
-}]]></find>
-			<action type="after-add"><![CDATA[//! Topic Age Warning - imkingdavid
+			<find><![CDATA[//! Topic Age Warning - imkingdavid
 //! Is the topic too old?
 /*
 Configs:
@@ -75,20 +71,27 @@ $current_interval = $current_time - $check_time;
 $pretty_interval = compare_dates($check_time, $current_time);
 $author_exempt = (($post_data['poster_id'] === $user->data['user_id']) && $config['taw_author_exempt']) ? true : false;
 //! Time for the longest conditional you've ever seen!
-if($mode == 'reply' && !$author_exempt && $interval && !$auth->acl_get('m_', $forum_id) && ($current_interval > $interval))
+if($mode == 'reply' && !$author_exempt && $interval && $auth->acl_get('m_', $forum_id) && ($current_interval > $interval))
 {
-	$message = sprintf($user->lang['TOPIC_AGE_WARNING'], $pretty_interval);
-//	if($config['taw_lock'])
-//	{
+	if($config['taw_lock'])
+	{
 		//do topic locking stuff.
-//	}
-//	else
-//	{
+		$sql = 'UPDATE ' . TOPICS_TABLE . '
+				SET topic_status = ' . ITEM_LOCKED . "
+				WHERE topic_id = $topic_id
+					AND topic_moved_id = 0";
+		$result = $db->sql_query($sql);
+		$message = sprintf($user->lang['TOPIC_AGE_WARNING_LOCK'], $pretty_interval);
+		trigger_error($message);
+	}
+	else
+	{
+		$message = sprintf($user->lang['TOPIC_AGE_WARNING'], $pretty_interval);
 		$template->assign_vars(array(
 			'S_TOPIC_AGE_WARNING'	=> true,
 			'TOPIC_AGE_WARNING'		=> $message,
 		));
-//	}
+	}
 }
 // METHOD STOLEN FROM http://php.net/manual/en/ref.datetime.php
 function compare_dates($date1, $date2) 
@@ -108,7 +111,7 @@ function compare_dates($date1, $date2)
 	$levels = 2; 
 	$current_level = 1; 
 	$result = array(); 
-	foreach($blocks as $block)
+	foreach($blocks as $block) 
 	{ 
 		if ($current_level > $levels)
 		{
