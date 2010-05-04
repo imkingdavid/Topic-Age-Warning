@@ -73,7 +73,7 @@ $interval = $config['taw_interval'];
 $check_time = $post_data[ ($config['taw_last_post']) ? 'topic_last_post_time' : 'topic_time' ];
 $current_interval = $current_time - $check_time;
 $pretty_interval = compare_dates($check_time, $current_time);
-$author_exempt = 0;
+$author_exempt = (($post_data['poster_id'] === $user->data['user_id']) && $config['taw_author_exempt']) ? true : false;
 //! Time for the longest conditional you've ever seen!
 if($mode == 'reply' && !$author_exempt && $interval && $auth->acl_get('m_', $forum_id) && ($current_interval > $interval))
 {
