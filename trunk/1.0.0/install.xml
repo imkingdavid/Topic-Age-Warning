@@ -43,6 +43,59 @@
 	<copy>
 		<file from="root/*.*" to="*.*" />
 	</copy>
+	<open src="styles/prosilver/template/posting_editor.html">
+		<edit>
+			<find><![CDATA[	<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->]]></find>
+			<action type="after-add"><![CDATA[    <!-- IF S_TOPIC_AGE_WARNING --><p class="error">{TOPIC_AGE_WARNING}</p><!-- ENDIF -->]]></action>
+		</edit>
+	</open>
+	<open src="includes/acp/acp_board.php">
+		<edit>
+			<find><![CDATA['legend3'					=> 'ACP_SUBMIT_CHANGES',]]></find>
+			<action type="before-add"><![CDATA[						'legend4'					=> 'TOPIC_AGE_WARNING',
+						'taw_interval_type'		=> false,
+						'taw_interval'			=> array('lang' => 'TAW_INTERVAL',			'validate' => 'int:0',		'type' => 'custom', 'method' => 'taw_interval', 'explain' => true),
+						'taw_lock'				=> array('lang' => 'TAW_LOCK',				'validate' => 'bool',		'type' =>     'radio:yes_no', 'explain' => true),
+						'taw_author_exempt'		=> array('lang' => 'TAW_AUTHOR_EXEMPT',		'validate' => 'bool',		'type' => 'radio:yes_no', 'explain' => true),
+						'taw_last_post'			=> array('lang' => 'TAW_LAST_POST',			'validate' => 'bool',		'type' => 'radio:yes_no', 'explain' => true),]]></action>
+		</edit>
+		<edit>
+			<find><![CDATA[/**
+	* Select bump interval
+	*/
+	function bump_interval($value, $key)
+	{
+		global $user;
+
+		$s_bump_type = '';
+		$types = array('m' => 'MINUTES', 'h' => 'HOURS', 'd' => 'DAYS');
+		foreach ($types as $type => $lang)
+		{
+			$selected = ($this->new_config['bump_type'] == $type) ? ' selected="selected"' : '';
+			$s_bump_type .= '<option value="' . $type . '"' . $selected . '>' . $user->lang[$lang] . '</option>';
+		}
+
+		return '<input id="' . $key . '" type="text" size="3" maxlength="4" name="config[bump_interval]" value="' . $value . '" />&nbsp;<select name="config[bump_type]">' . $s_bump_type . '</select>';
+	}]]></find>
+			<action type="after-add"><![CDATA[/**
+	* Select Topic Age Warning interval
+	*/
+	function taw_interval($value, $key)
+	{
+		global $user;
+
+		$s_taw_type = '';
+		$types = array('d' => 'DAYS', 'm' => 'MONTHS', 'y' => 'YEARS');
+		foreach ($types as $type => $lang)
+		{
+			$selected = ($this->new_config['taw_interval_type'] == $type) ? ' selected="selected"' : '';
+			$s_taw_type .= '<option value="' . $type . '"' . $selected . '>' . $user->lang[$lang] . '</option>';
+		}
+
+		return '<input id="' . $key . '" type="text" size="3" maxlength="4" name="config[taw_interval]" value="' . $value . '" />&nbsp;<select name="config[taw_interval_type]">' . $s_taw_type . '</select>';
+	}]]></action>
+		</edit>
+	</open>
 	<open src="language/en/common.php">
 		<edit>
 			<find><![CDATA[	'TOPIC'				=> 'Topic',
@@ -53,6 +106,25 @@
 	//! END Topic Age Warning - imkingdavid]]></action>
 		</edit>
 	</open>
+	<open src="language/en/acp/board.php">
+		<edit>
+			<find><![CDATA[	'BUMP_INTERVAL'					=> 'Bump interval',
+	'BUMP_INTERVAL_EXPLAIN'			=> 'Number of minutes, hours or days between the last post to a topic and the ability to bump this topic.',]]></find>
+			<action type="after-add"><![CDATA[//! Topic Age Warning - imkingdavid
+	'TOPIC_AGE_WARNING'				=> 'Topic Age Warning Settings',
+	'TAW_INTERVAL'					=> 'Topic Age Warning interval',
+	'TAW_INTERVAL_EXPLAIN'			=> 'Number of days, months or years after which a user will recieve the topic age warning. <strong>If set to 0, the MOD will be disabled.</strong>',
+	'TAW_LOCK'						=> 'Lock old topic',
+	'TAW_LOCK_EXPLAIN'				=> 'If \'Yes\', topics to which a user attempts to reply after the set interval will be automatically locked.',
+	'TAW_AUTHOR_EXEMPT'				=> 'Exempt author from Topic Age Warning',
+	'TAW_AUTHOR_EXEMPT_EXPLAIN'		=> 'If \'Yes\', the author of the topic will be able to reply to their own topics, even after the set interval is passed.',
+	'TAW_LAST_POST'					=> 'Use Last Reply time',
+	'TAW_LAST_POST_EXPLAIN'			=> 'If \'Yes\', the old topics will be determined using the time of the last reply to the topic. If \'No\', old topics will be determined using the time of the topic\'s creation.',
+	'MONTHS'						=> 'Months',
+	'YEARS'							=> 'Years',
+	//! END Topic Age Warning - imkingdavid]]></action>
+		</edit>
+	</open>
 	<open src="posting.php">
 		<edit>
 			<find><![CDATA[//! Topic Age Warning - imkingdavid
@@ -60,18 +132,34 @@
 /*
 Configs:
 taw_interval (integer) Interval (NOTE: A value of 0, or false, disables the MOD)
+taw_interval_type (string) d (Day) m (Month) y (Year)
 taw_last_post (bool) If true, base interval on last post time; else base on original topic creation time
 taw_lock (bool) Lock the topic if triggered?
 taw_author_exempt (bool) Exempt topic author?
 */
 $current_time = time();
-$interval = $config['taw_interval'];
+$interval_value = $config['taw_interval'];
+$interval_type = $config['taw_interval_type'];
+$interval = 0;
+switch($interval_type)
+{
+	default:
+	case 'y':
+		$interval = $interval_value * (60*60*24*365);
+		break;
+	case 'd':
+		$interval = $interval_value * (60*60*24);
+		break;
+	case 'm':
+		$interval = $interval_value * (60*60*24*31);
+		break;
+}
 $check_time = $post_data[ ($config['taw_last_post']) ? 'topic_last_post_time' : 'topic_time' ];
 $current_interval = $current_time - $check_time;
 $pretty_interval = compare_dates($check_time, $current_time);
-$author_exempt = (($post_data['poster_id'] === $user->data['user_id']) && $config['taw_author_exempt']) ? true : false;
+$author_exempt = (($post_data['topic_poster'] === $user->data['user_id']) && $config['taw_author_exempt']) ? true : false;
 //! Time for the longest conditional you've ever seen!
-if($mode == 'reply' && !$author_exempt && $interval && $auth->acl_get('m_', $forum_id) && ($current_interval > $interval))
+if($mode == 'reply' && !$author_exempt && $interval && !$auth->acl_get('m_', $forum_id) && ($current_interval > $interval))
 {
 	if($config['taw_lock'])
 	{

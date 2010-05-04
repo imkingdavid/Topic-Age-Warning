@@ -82,7 +82,8 @@ $options = array(
 $versions = array(
 	'1.0.0' => array(
 		'config_add'	=> array(
-			array('taw_interval',		0), // 1 month is 2678400
+			array('taw_interval',		0),
+			array('taw_interval_type', 'd'), // d = Day, m = Month, y = Year
 			array('taw_last_post',		1),
 			array('taw_lock',			0),
 			array('taw_author_exempt',	0),
