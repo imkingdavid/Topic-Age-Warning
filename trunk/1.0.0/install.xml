@@ -49,7 +49,7 @@
 	'TOPICS'			=> 'Topics',]]></find>
 			<action type="after-add"><![CDATA[	//! Topic Age Warning - imkingdavid
 	'TOPIC_AGE_WARNING'	=> 'You are attempting to reply to a topic that is %s old. Instead, please begin a new topic, or search for another related topic that may be more suitable.',
-	'WARNING'			=> 'Warning',]]></action>
+	//! END Topic Age Warning - imkingdavid]]></action>
 		</edit>
 	</open>
 	<open src="posting.php">
@@ -137,18 +137,8 @@ function compare_dates($date1, $date2)
 	</open>
 	<open src="styles/prosilver/template/posting_editor.html">
 		<edit>
-			<find><![CDATA[<!-- IF S_DELETE_ALLOWED -->
-	<dl>
-		<dt><label for="delete">{L_DELETE_POST}:</label></dt>
-		<dd><label for="delete"><input type="checkbox" name="delete" id="delete" /> {L_DELETE_POST_WARN}</label></dd>
-	</dl>
-	<!-- ENDIF -->]]></find>
-			<action type="before-add"><![CDATA[    <!-- IF S_TOPIC_AGE_WARNING -->
-    <dl style="border:#800000 thin solid; padding:5px; background-color:#C99C99;">
-    	<dt><label for="taw">{L_WARNING}:</label></dt>
-        <dd style="font-weight:bold;color:#AA0000;">{TOPIC_AGE_WARNING}</dd>
-    </dl>
-    <!-- ENDIF -->]]></action>
+			<find><![CDATA[	<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->]]></find>
+			<action type="after-add"><![CDATA[    <!-- IF S_TOPIC_AGE_WARNING --><p class="error">{TOPIC_AGE_WARNING}</p><!-- ENDIF -->]]></action>
 		</edit>
 	</open>
 	<php-installer>taw_install.php</php-installer>
