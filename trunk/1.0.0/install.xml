@@ -75,7 +75,7 @@ $current_interval = $current_time - $check_time;
 $pretty_interval = compare_dates($check_time, $current_time);
 $author_exempt = (($post_data['poster_id'] === $user->data['user_id']) && $config['taw_author_exempt']) ? true : false;
 //! Time for the longest conditional you've ever seen!
-if($mode == 'reply' && !$author_exempt && $interval && $auth->acl_get('m_', $forum_id) && ($current_interval > $interval))
+if($mode == 'reply' && !$author_exempt && $interval && !$auth->acl_get('m_', $forum_id) && ($current_interval > $interval))
 {
 	$message = sprintf($user->lang['TOPIC_AGE_WARNING'], $pretty_interval);
 //	if($config['taw_lock'])
@@ -108,7 +108,7 @@ function compare_dates($date1, $date2)
 	$levels = 2; 
 	$current_level = 1; 
 	$result = array(); 
-	foreach($blocks as $block) 
+	foreach($blocks as $block)
 	{ 
 		if ($current_level > $levels)
 		{
