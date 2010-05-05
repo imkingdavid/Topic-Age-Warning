@@ -48,7 +48,7 @@ class taw
 		$this->pretty_interval = $this->compare_dates($check_time, $time);
 		$interval = $this->get_interval($interval_type, $interval_value);
 		
-		$conditional = (!$author_exempt && $interval && $auth->acl_get('m_', $forum_id) && ($current_interval > $interval));
+		$conditional = (!$author_exempt && $interval && !$auth->acl_get('m_', $forum_id) && ($current_interval > $interval));
 		
 		//Let's do it!
 		if($conditional)
