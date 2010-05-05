@@ -30,6 +30,13 @@
 	</installation>
 	<history>
 		<entry>
+			<date>2010-05-04</date>
+			<rev-version>0.1.0 BETA</rev-version>
+			<changelog lang="en">
+				<change>Begun development</change>
+			</changelog>
+		</entry>
+		<entry>
 			<date>2010-05-03</date>
 			<rev-version>0.0.0 DEV</rev-version>
 			<changelog lang="en">
@@ -127,7 +134,12 @@
 	</open>
 	<open src="posting.php">
 		<edit>
-			<find><![CDATA[//! Topic Age Warning - imkingdavid
+			<find><![CDATA[// Forum/Topic locked?
+if (($post_data['forum_status'] == ITEM_LOCKED || (isset($post_data['topic_status']) && $post_data['topic_status'] == ITEM_LOCKED)) && !$auth->acl_get('m_edit', $forum_id))
+{
+	trigger_error(($post_data['forum_status'] == ITEM_LOCKED) ? 'FORUM_LOCKED' : 'TOPIC_LOCKED');
+}]]></find>
+			<action type="after-add"><![CDATA[//! Topic Age Warning - imkingdavid
 //! Is the topic too old?
 /*
 Configs:

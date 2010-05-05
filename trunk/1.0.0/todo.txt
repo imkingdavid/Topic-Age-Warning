@@ -1,2 +1,3 @@
 To Do List for 1.0.0:
--begin work on the MOD.
+
+-Testing, testing, and more testing.
