@@ -122,8 +122,8 @@
 	</open>
 	<open src="language/en/acp/board.php">
 		<edit>
-			<find><![CDATA[	'BUMP_INTERVAL'					=> 'Bump interval',
-	'BUMP_INTERVAL_EXPLAIN'			=> 'Number of minutes, hours or days between the last post to a topic and the ability to bump this topic.',]]></find>
+			<find><![CDATA[   'BUMP_INTERVAL'               => 'Bump interval',
+   'BUMP_INTERVAL_EXPLAIN'         => 'Number of minutes, hours or days between the last post to a topic and the ability to bump this topic. Setting the value to 0 disables this feature.',]]></find>
 			<action type="after-add"><![CDATA[//! Topic Age Warning - imkingdavid
 	'TOPIC_AGE_WARNING'				=> 'Topic Age Warning Settings',
 	'TAW_INTERVAL'					=> 'Topic Age Warning interval',
