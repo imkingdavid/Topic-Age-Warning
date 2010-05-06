@@ -21,7 +21,7 @@
 		</author>
 	</author-group>
 
-	<mod-version>0.1.1 BETA</mod-version>
+	<mod-version>0.1.2 BETA</mod-version>
 
 	<installation>
 		<level>intermediate</level>
@@ -29,6 +29,14 @@
 		<target-version>3.0.7-PL1</target-version>
 	</installation>
 	<history>
+		<entry>
+			<date>2010-05-06</date>
+			<rev-version>0.1.2 BETA</rev-version>
+			<changelog lang="en">
+				<change>[add] added UMIL folder in root/ so that it can be validated (thanks, DoYouSpeakWak)</change>
+				<change>[fix] Incorrect FIND in install.xml file prevented AutoMOD installation</change>
+			</changelog>
+		</entry>
 		<entry>
 			<date>2010-05-04</date>
 			<rev-version>0.1.1 BETA</rev-version>
