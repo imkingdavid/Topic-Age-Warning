@@ -21,7 +21,7 @@
 		</author>
 	</author-group>
 
-	<mod-version>0.1.2 BETA</mod-version>
+	<mod-version>0.1.3 BETA</mod-version>
 
 	<installation>
 		<level>intermediate</level>
@@ -30,11 +30,20 @@
 	</installation>
 	<history>
 		<entry>
+			<date>2010-05-16</date>
+			<rev-version>0.1.3 BETA</rev-version>
+			<changelog lang="en">
+				<change>[remove] removed duplicate edits in install.xml file (thanks Anyasha)</change>
+				<change>[new] support for quick reply.</change>
+				<change>[change] a couple of minor details in install.xml and functions_taw.php (thanks RMcGirr83).
+			</changelog>
+		</entry>
+		<entry>
 			<date>2010-05-06</date>
 			<rev-version>0.1.2 BETA</rev-version>
 			<changelog lang="en">
 				<change>[add] added UMIL folder in root/ so that it can be validated (thanks, DoYouSpeakWak)</change>
-				<change>[fix] Incorrect FIND in install.xml file prevented AutoMOD installation</change>
+				<change>[fix] Incorrect FIND in install.xml file prevented AutoMOD installation (thanks, DoYouSpeakWak)</change>
 			</changelog>
 		</entry>
 		<entry>
@@ -65,16 +74,10 @@
 	<copy>
 		<file from="root/*.*" to="*.*" />
 	</copy>
-	<open src="styles/prosilver/template/posting_editor.html">
-		<edit>
-			<find><![CDATA[	<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->]]></find>
-			<action type="after-add"><![CDATA[    <!-- IF S_TOPIC_AGE_WARNING --><p class="error">{TOPIC_AGE_WARNING}</p><!-- ENDIF -->]]></action>
-		</edit>
-	</open>
 	<open src="includes/acp/acp_board.php">
 		<edit>
 			<find><![CDATA['legend3'					=> 'ACP_SUBMIT_CHANGES',]]></find>
-			<action type="before-add"><![CDATA[						'legend4'					=> 'TOPIC_AGE_WARNING',
+			<action type="before-add"><![CDATA[						'legendtaw'					=> 'TOPIC_AGE_WARNING',
 						'taw_interval_type'		=> false,
 						'taw_interval'			=> array('lang' => 'TAW_INTERVAL',			'validate' => 'int:0',		'type' => 'custom', 'method' => 'taw_interval', 'explain' => true),
 						'taw_lock'				=> array('lang' => 'TAW_LOCK',				'validate' => 'bool',		'type' =>     'radio:yes_no', 'explain' => true),

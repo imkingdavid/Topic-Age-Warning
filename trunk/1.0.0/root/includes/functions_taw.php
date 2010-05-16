@@ -3,7 +3,7 @@
 *
 *===================================================================
 *
-*  Topic Age Warning Install File
+*  Topic Age Warning Functions File
 *-------------------------------------------------------------------
 *	Script info:
 * Version:		1.0.0
