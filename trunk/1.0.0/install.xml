@@ -82,7 +82,8 @@
 						'taw_interval'			=> array('lang' => 'TAW_INTERVAL',			'validate' => 'int:0',		'type' => 'custom', 'method' => 'taw_interval', 'explain' => true),
 						'taw_lock'				=> array('lang' => 'TAW_LOCK',				'validate' => 'bool',		'type' =>     'radio:yes_no', 'explain' => true),
 						'taw_author_exempt'		=> array('lang' => 'TAW_AUTHOR_EXEMPT',		'validate' => 'bool',		'type' => 'radio:yes_no', 'explain' => true),
-						'taw_last_post'			=> array('lang' => 'TAW_LAST_POST',			'validate' => 'bool',		'type' => 'radio:yes_no', 'explain' => true),]]></action>
+						'taw_last_post'			=> array('lang' => 'TAW_LAST_POST',			'validate' => 'bool',		'type' => 'radio:yes_no', 'explain' => true),
+						'taw_quickreply'		=> array('lang' => 'TAW_QUICKREPLY',		'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true), ]]></action>
 		</edit>
 		<edit>
 			<find><![CDATA[/**
@@ -145,6 +146,8 @@
 	'TAW_AUTHOR_EXEMPT_EXPLAIN'		=> 'If \'Yes\', the author of the topic will be able to reply to their own topics, even after the set interval is passed.',
 	'TAW_LAST_POST'					=> 'Use Last Reply time',
 	'TAW_LAST_POST_EXPLAIN'			=> 'If \'Yes\', the old topics will be determined using the time of the last reply to the topic. If \'No\', old topics will be determined using the time of the topic\'s creation.',
+	'TAW_QUICKREPLY'				=> 'Allow quick reply (where enabled) in old topics',
+	'TAW_QUICKREPLY_EXPLAIN'		=> 'If \'Yes\', quick reply will still be usable in old topics (where enabled). If \'No\', quick reply will not show up in old topics, even if enabled in that forum.',
 	'MONTHS'						=> 'Months',
 	'YEARS'							=> 'Years',
 	//! END Topic Age Warning - imkingdavid]]></action>
@@ -167,10 +170,38 @@ if($mode == 'reply')
 //! END Topic Age Warning - imkingdavid]]></action>
 		</edit>
 	</open>
+	<open src="viewtopic.php">
+		<edit>
+			<find><![CDATA[$s_quick_reply = $s_allowed_reply && $user->data['is_registered'] && $config['allow_quick_reply'] && ($topic_data['forum_flags'] & FORUM_FLAG_QUICK_REPLY);]]></find>
+			<action type="after-add"><![CDATA[//! Topic Age Warning - imkingdavid
+if($s_quick_reply)
+{
+	include($phpbb_root_path . 'includes/functions_taw.' . $phpEx);
+	//calls taw::__construct() which in turn calls taw::go()
+	$taw = new taw($topic_data, 'viewtopic');
+	$s_quick_reply = ($taw->quickreply === false) ? false : $s_quick_reply;
+}
+//! END Topic Age Warning - imkingdavid]]></action>
+		</edit>
+	</open>
 	<open src="styles/prosilver/template/posting_editor.html">
 		<edit>
 			<find><![CDATA[	<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->]]></find>
 			<action type="after-add"><![CDATA[    <!-- IF S_TOPIC_AGE_WARNING --><p class="error">{TOPIC_AGE_WARNING}</p><!-- ENDIF -->]]></action>
+		</edit>
+	</open>
+	<open src="styles/prosilver/template/quickreply_editor.html">
+		<edit>
+			<comment lang="en">Around line 28. (Yes, this is identical to the next edit; the edit should be performed both times.)</comment>
+			<find><![CDATA[<h2>{L_QUICKREPLY}</h2>
+					<fieldset class="fields1">]]></find>
+			<action type="after-add"><![CDATA[<!-- IF S_TOPIC_AGE_WARNING --><p class="error">{TOPIC_AGE_WARNING}</p><!-- ENDIF -->]]></action>
+		</edit>
+		<edit>
+			<comment lang="en">Around line 54 after the previous edit is performed. (Yes, this is identical to the previous edit; the edit should be performed both times.)</comment>
+			<find><![CDATA[<h2>{L_QUICKREPLY}</h2>
+					<fieldset class="fields1">]]></find>
+			<action type="after-add"><![CDATA[<!-- IF S_TOPIC_AGE_WARNING --><p class="error">{TOPIC_AGE_WARNING}</p><!-- ENDIF -->]]></action>
 		</edit>
 	</open>
 	<php-installer>taw_install.php</php-installer>

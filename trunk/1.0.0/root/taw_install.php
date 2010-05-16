@@ -87,6 +87,7 @@ $versions = array(
 			array('taw_last_post',		1),
 			array('taw_lock',			0),
 			array('taw_author_exempt',	0),
+			array('taw_quickreply',		0),
 		),
 	),
 );

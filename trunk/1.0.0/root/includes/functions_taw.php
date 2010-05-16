@@ -3,7 +3,7 @@
 *
 *===================================================================
 *
-*  Topic Age Warning Functions File
+*  Topic Age Warning Install File
 *-------------------------------------------------------------------
 *	Script info:
 * Version:		1.0.0
@@ -25,7 +25,7 @@ if(!defined('IN_PHPBB'))
 
 class taw
 {	
-	function __construct($post_data)
+	function __construct($post_data, $mode = 'posting')
 	{
 		global $config, $user, $auth;
 		// Set class variables with operations and such
@@ -35,6 +35,7 @@ class taw
 		$this->year = $this->month * 12; // 12 months in the year
 		$this->topic_id = $post_data['topic_id'];
 		$this->lock = $config['taw_lock'];
+		$this->quickreply = $config['taw_quickreply']; // Bool; true means show quickreply when enabled, but display warning. False means don't show autoreply in old topics.
 		
 		$forum_id = $post_data['forum_id'];
 		$check_time = $post_data[ ($config['taw_last_post']) ? 'topic_last_post_time' : 'topic_time' ];
@@ -53,7 +54,14 @@ class taw
 		//Let's do it!
 		if($conditional)
 		{
-			$this->go();
+			if($mode == 'posting')
+			{
+				$this->go_posting();
+			}
+			else
+			{
+				$this->go_viewtopic();
+			}
 		}
 	}
 	
@@ -116,7 +124,7 @@ class taw
 		return implode(' and ',$result); 
 	}
 	
-	function go()
+	function go_posting()
 	{
 		global $user, $template;
 		$lock = $this->lock;
@@ -131,7 +139,16 @@ class taw
 			trigger_error($message);
 		}
 		//enable the warning
+		$template->assign_vars(array(
+			'S_TOPIC_AGE_WARNING'	=> true,
+			'TOPIC_AGE_WARNING'		=> $message,
+		));
+	}
+	function go_viewtopic()
+	{
+		global $user, $template;
 		$message = sprintf($user->lang['TOPIC_AGE_WARNING'], $this->pretty_interval);
+		//enable the warning
 		$template->assign_vars(array(
 			'S_TOPIC_AGE_WARNING'	=> true,
 			'TOPIC_AGE_WARNING'		=> $message,
