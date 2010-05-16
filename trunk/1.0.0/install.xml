@@ -76,8 +76,8 @@
 	</copy>
 	<open src="includes/acp/acp_board.php">
 		<edit>
-			<find><![CDATA['legend3'					=> 'ACP_SUBMIT_CHANGES',]]></find>
-			<action type="before-add"><![CDATA[						'legendtaw'					=> 'TOPIC_AGE_WARNING',
+			<find><![CDATA['max_post_img_height'	=> array('lang' => 'MAX_POST_IMG_HEIGHT',	'validate' => 'int:0',		'type' => 'text:5:4', 'explain' => true, 'append' => ' ' . $user->lang['PIXEL']),]]></find>
+			<action type="after-add"><![CDATA[						'legendtaw'					=> 'TOPIC_AGE_WARNING',
 						'taw_interval_type'		=> false,
 						'taw_interval'			=> array('lang' => 'TAW_INTERVAL',			'validate' => 'int:0',		'type' => 'custom', 'method' => 'taw_interval', 'explain' => true),
 						'taw_lock'				=> array('lang' => 'TAW_LOCK',				'validate' => 'bool',		'type' =>     'radio:yes_no', 'explain' => true),
@@ -134,8 +134,8 @@
 	</open>
 	<open src="language/en/acp/board.php">
 		<edit>
-			<find><![CDATA[   'BUMP_INTERVAL'               => 'Bump interval',
-   'BUMP_INTERVAL_EXPLAIN'         => 'Number of minutes, hours or days between the last post to a topic and the ability to bump this topic. Setting the value to 0 disables this feature.',]]></find>
+			<find><![CDATA[	'BUMP_INTERVAL'					=> 'Bump interval',
+	'BUMP_INTERVAL_EXPLAIN'			=> 'Number of minutes, hours or days between the last post to a topic and the ability to bump this topic. Setting the value to 0 disables this feature.',]]></find>
 			<action type="after-add"><![CDATA[//! Topic Age Warning - imkingdavid
 	'TOPIC_AGE_WARNING'				=> 'Topic Age Warning Settings',
 	'TAW_INTERVAL'					=> 'Topic Age Warning interval',
@@ -172,8 +172,9 @@ if($mode == 'reply')
 	</open>
 	<open src="viewtopic.php">
 		<edit>
-			<find><![CDATA[$s_quick_reply = $s_allowed_reply && $user->data['is_registered'] && $config['allow_quick_reply'] && ($topic_data['forum_flags'] & FORUM_FLAG_QUICK_REPLY);]]></find>
-			<action type="after-add"><![CDATA[//! Topic Age Warning - imkingdavid
+			<find><![CDATA[if ($s_can_vote || $s_quick_reply)
+{]]></find>
+			<action type="before-add"><![CDATA[//! Topic Age Warning - imkingdavid
 if($s_quick_reply)
 {
 	include($phpbb_root_path . 'includes/functions_taw.' . $phpEx);
