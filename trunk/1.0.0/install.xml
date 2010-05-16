@@ -192,7 +192,6 @@ if($s_quick_reply)
 	</open>
 	<open src="styles/prosilver/template/quickreply_editor.html">
 		<edit>
-			<comment lang="en">Around line 28. (Yes, this is identical to the next edit; the edit should be performed both times.)</comment>
 			<find><![CDATA[<h2>{L_QUICKREPLY}</h2>
 					<fieldset class="fields1">]]></find>
 			<action type="after-add"><![CDATA[<!-- IF S_TOPIC_AGE_WARNING --><p class="error">{TOPIC_AGE_WARNING}</p><!-- ENDIF -->]]></action>
