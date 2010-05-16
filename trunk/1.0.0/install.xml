@@ -35,7 +35,7 @@
 			<changelog lang="en">
 				<change>[remove] removed duplicate edits in install.xml file (thanks Anyasha)</change>
 				<change>[new] support for quick reply.</change>
-				<change>[change] a couple of minor details in install.xml and functions_taw.php (thanks RMcGirr83).
+				<change>[change] a couple of minor details in install.xml and functions_taw.php (thanks RMcGirr83).</change>
 			</changelog>
 		</entry>
 		<entry>
