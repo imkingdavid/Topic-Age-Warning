@@ -161,7 +161,7 @@ if (($post_data['forum_status'] == ITEM_LOCKED || (isset($post_data['topic_statu
 	trigger_error(($post_data['forum_status'] == ITEM_LOCKED) ? 'FORUM_LOCKED' : 'TOPIC_LOCKED');
 }]]></find>
 			<action type="after-add"><![CDATA[//! Topic Age Warning - imkingdavid
-if($mode == 'reply')
+if($mode == 'reply' || $mode == 'quote')
 {
 	include($phpbb_root_path . 'includes/functions_taw.' . $phpEx);
 	//calls taw::__construct() which in turn calls taw::go()
