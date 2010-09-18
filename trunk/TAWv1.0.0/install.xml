@@ -21,7 +21,7 @@
 		</author>
 	</author-group>
 
-	<mod-version>0.1.3 BETA</mod-version>
+	<mod-version>1.0.0</mod-version>
 
 	<installation>
 		<level>intermediate</level>
@@ -29,6 +29,14 @@
 		<target-version>3.0.7-PL1</target-version>
 	</installation>
 	<history>
+		<entry>
+			<date>2010-09-18</date>
+			<rev-version>1.0.0</rev-version>
+			<changelog lang="en">
+				<change>[fix] works when quoting a post as well (thanks romeo_piter)</change>
+				<change>[change] updated umil</change>
+			</changelog>
+		</entry>
 		<entry>
 			<date>2010-05-16</date>
 			<rev-version>0.1.3 BETA</rev-version>
