@@ -37,6 +37,8 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
+	//! MOD Title for install script
+	'TOPIC_AGE_WARNING'				=> 'Topic Age Warning',
 	//! Install
 	'INSTALL_TAW'					=> 'Install Topic Age Warning',
 	'INSTALL_TAW_CONFIRM'			=> 'Are you ready to install Topic Age Warning?',

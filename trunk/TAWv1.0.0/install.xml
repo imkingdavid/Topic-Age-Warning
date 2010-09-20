@@ -9,8 +9,7 @@
 	
 	<description lang="en">This MOD displays a warning to members when they attempt to reply to a topic that has had no replies for a specified amount of time. This can be set via the ACP.</description>
 
-	<author-notes lang="en">This MOD is currently in the BETA stage and should NOT be used in a live environment. You are, however, welcome to use it on a test board.
-	If you would like to make a donation for my work done on this MOD as well as other MODs, you may do so by going to the demo/test board (http://www.phpbbdevelopers.net/) and clicking the Donate button in the header. All donations are voluntary but appreciated.</author-notes>
+	<author-notes lang="en">If you would like to make a donation for my work done on this MOD as well as other MODs, you may do so by going to the demo/test board (http://www.phpbbdevelopers.net/) and clicking the Donate button in the header. All donations are voluntary but appreciated.</author-notes>
 
 	<author-group>
 		<author>
@@ -213,7 +212,7 @@ if($s_quick_reply)
 		</edit>
 	</open>
 	<php-installer>taw_install.php</php-installer>
-	<diy-instructions lang="en"><![CDATA[Development of MODs occurs during my free time. While I enjoy coding, it has to come as a second priority to any paying jobs. However, if I recieve donations I am more willing to do more work to compensate. If you feel willing to donate, please follow the instructions at the test board (http://www.phpbbdevelopers.net/). Thanks!]]>
+	<diy-instructions lang="en"><![CDATA[Once all file edits have been done and the SQL install file has been run, enter the ACP and purge the cache and refresh the templates on which this MOD has been installed.]]>
 	</diy-instructions>
 </action-group>
 </mod>
