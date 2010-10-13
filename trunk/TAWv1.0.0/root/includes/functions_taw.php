@@ -122,25 +122,24 @@ class taw
 				{
 					$plural='';
 				} 
-				$result[] = $amount.' '.$block['name'].$plural; 
-				$diff -= $amount*$block['amount']; 
+				$result[] = $amount . ' ' . $block['name'] . $plural; 
+				$diff -= $amount * $block['amount']; 
 				$current_level++; 
 			} 
 		} 
-		return implode(' and ',$result); 
+		return implode(' ' . $user->lang['AND'] . ' ',$result); 
 	}
 	
 	function go_posting()
 	{
 		global $user, $template;
-		$lock = $this->lock;
-		if($lock) // If they want the topic to be locked, lock it.
+		if($this->lock) // If they want the topic to be locked, lock it.
 		{
 			$this->lock_topic($this->topic_id);
 		}
-		$langkey = ($lock) ? 'TOPIC_AGE_WARNING_LOCK' : 'TOPIC_AGE_WARNING';
+		$langkey = ($this->lock) ? 'TOPIC_AGE_WARNING_LOCK' : 'TOPIC_AGE_WARNING';
 		$message = sprintf($user->lang[$langkey], $this->pretty_interval);
-		if($lock)
+		if($this->lock)
 		{
 			trigger_error($message);
 		}
