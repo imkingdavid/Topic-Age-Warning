@@ -152,6 +152,7 @@ class taw
 		$template->assign_vars(array(
 			'S_TOPIC_AGE_WARNING'	=> true,
 			'TOPIC_AGE_WARNING'		=> $message,
+			'S_DISABLE_QR'			=> ($config['taw_quickreply']) ? false : true,
 		));
 	}
 	
