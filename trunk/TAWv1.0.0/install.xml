@@ -187,7 +187,6 @@ if($s_quick_reply)
 	include($phpbb_root_path . 'includes/functions_taw.' . $phpEx);
 	//calls taw::__construct() which in turn calls taw::go()
 	$taw = new taw($topic_data, 'viewtopic');
-	$s_quick_reply = ($taw->quickreply === false) ? false : $s_quick_reply;
 }
 //! END Topic Age Warning - imkingdavid]]></action>
 		</edit>

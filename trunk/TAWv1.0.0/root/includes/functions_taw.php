@@ -93,7 +93,8 @@ class taw
 	
 	// METHOD STOLEN FROM http://php.net/manual/en/ref.datetime.php
 	function compare_dates($date1, $date2) 
-	{ 
+	{
+		global $user;
 		$blocks = array( 
 			array('name' => 'year',		'amount' => $this->year), 
 			array('name' => 'month',	'amount' => $this->month),
@@ -131,7 +132,7 @@ class taw
 	
 	function go_posting()
 	{
-		global $user, $template;
+		global $user, $template, $db;
 		$langkey = 'TOPIC_AGE_WARNING';
 		if($this->lock) // If they want the topic to be locked, lock it.
 		{
