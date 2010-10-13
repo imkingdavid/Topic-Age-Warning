@@ -26,6 +26,7 @@ if(!defined('IN_PHPBB'))
 class taw
 {	
 	private $day;
+	private $week;
 	private $month;
 	private $year;
 	private $topic_id;
@@ -37,7 +38,8 @@ class taw
 		// Set class variables with operations and such
 		$time = time();
 		$this->day = 60 * 60 * 24; // aka 86,400 seconds. Broken into seconds * minutes * hours = 1 day.
-		$this->month = $this->day * 30.436875; //30.436875 = average length of a month (according to wikipedia)
+		$this->week = $this->day * 7;
+		$this->month = $this->day * 30.436875; //30.436875 = average length of a month in days (according to wikipedia)
 		$this->year = $this->month * 12; // 12 months in the year
 		$this->topic_id = $post_data['topic_id'];
 		$this->lock = $config['taw_lock'];
@@ -74,15 +76,15 @@ class taw
 	function get_interval($interval_type = 'd', $interval_value = 0)
 	{
 		$interval = 0;
-		if($interval_type == 'y')
+		if($interval_type == 'y') // year
 		{
 			$interval = $interval_value * $this->year;
 		}
-		elseif($interval_type == 'm')
+		elseif($interval_type == 'm') // month
 		{
 			$interval = $interval_value * $this->month;
 		}
-		else
+		else // day
 		{
 			$interval = $interval_value * $this->day;
 		}
@@ -93,15 +95,12 @@ class taw
 	function compare_dates($date1, $date2) 
 	{ 
 		$blocks = array( 
-			array('name'=>'year','amount'	=> 60*60*24*365 ), 
-			array('name'=>'month','amount'	=> 60*60*24*31 ), //2678400 
-			array('name'=>'week','amount'	=> 60*60*24*7 ), 
-			array('name'=>'day','amount'	=> 60*60*24 ), 
-			array('name'=>'hour','amount'   => 60*60 ), 
-			array('name'=>'minute','amount' => 60 ), 
-			array('name'=>'second','amount' => 1 ) 
-			); 
-		$diff = abs($date1-$date2); 
+			array('name' => 'year',		'amount' => $this->year), 
+			array('name' => 'month',	'amount' => $this->month),
+			array('name' => 'week',		'amount' => $this->week), 
+			array('name' => 'day',		'amount' => $this->day), 
+		);
+		$diff = abs($date1 - $date2); 
 		$levels = 2; // how specific to be; 1 = "1 year"; 2 = "1 year and 2 months"; 3 = "1 year and 2 months and 4 days"; etc.
 		$current_level = 1; 
 		$result = array(); 
@@ -111,10 +110,10 @@ class taw
 			{
 				break;
 			}
-			if ($diff/$block['amount'] >= 1) 
+			if ($diff / $block['amount'] >= 1) 
 			{ 
-				$amount = floor($diff/$block['amount']); 
-				if ($amount>1)
+				$amount = floor($diff / $block['amount']); 
+				if ($amount > 1)
 				{
 					$plural='s';
 				}
@@ -127,17 +126,22 @@ class taw
 				$current_level++; 
 			} 
 		} 
-		return implode(' ' . $user->lang['AND'] . ' ',$result); 
+		return implode(' ' . $user->lang['AND'] . ' ', $result); 
 	}
 	
 	function go_posting()
 	{
 		global $user, $template;
+		$langkey = 'TOPIC_AGE_WARNING';
 		if($this->lock) // If they want the topic to be locked, lock it.
 		{
-			$this->lock_topic($this->topic_id);
+			$sql = 'UPDATE ' . TOPICS_TABLE . '
+				SET topic_status = ' . ITEM_LOCKED . '
+				WHERE topic_id = '  . (int) $this->topic_id . '
+					AND topic_moved_id = 0';
+			$db->sql_query($sql);
+			$langkey .= '_LOCK';
 		}
-		$langkey = ($this->lock) ? 'TOPIC_AGE_WARNING_LOCK' : 'TOPIC_AGE_WARNING';
 		$message = sprintf($user->lang[$langkey], $this->pretty_interval);
 		if($this->lock)
 		{
@@ -159,15 +163,5 @@ class taw
 			'TOPIC_AGE_WARNING'		=> $message,
 			'S_DISABLE_QR'			=> ($this->quickreply || $this->lock) ? false : true,
 		));
-	}
-	
-	function lock_topic($topic_id)
-	{
-		global $db;
-		$sql = 'UPDATE ' . TOPICS_TABLE . '
-		SET topic_status = ' . ITEM_LOCKED . "
-		WHERE topic_id = $topic_id
-			AND topic_moved_id = 0";
-		return $db->sql_query($sql);
 	}
 }
