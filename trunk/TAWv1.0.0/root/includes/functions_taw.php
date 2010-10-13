@@ -25,6 +25,12 @@ if(!defined('IN_PHPBB'))
 
 class taw
 {	
+	private $day;
+	private $month;
+	private $year;
+	private $topic_id;
+	private $lock;
+	private $quickreply;
 	function __construct($post_data, $mode = 'posting')
 	{
 		global $config, $user, $auth;
@@ -152,7 +158,7 @@ class taw
 		$template->assign_vars(array(
 			'S_TOPIC_AGE_WARNING'	=> true,
 			'TOPIC_AGE_WARNING'		=> $message,
-			'S_DISABLE_QR'			=> ($config['taw_quickreply']) ? false : true,
+			'S_DISABLE_QR'			=> ($this->quickreply || $this->lock) ? false : true,
 		));
 	}
 	
