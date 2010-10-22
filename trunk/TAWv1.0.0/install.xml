@@ -9,7 +9,8 @@
 	
 	<description lang="en">This MOD displays a warning to members when they attempt to reply to a topic that has had no replies for a specified amount of time. This can be set via the ACP.</description>
 
-	<author-notes lang="en">If you would like to make a donation for my work done on this MOD as well as other MODs, you may do so by going to the demo/test board (http://www.phpbbdevelopers.net/) and clicking the Donate button in the header. All donations are voluntary but appreciated.</author-notes>
+	<author-notes lang="en">This MOD requires PHP 5.
+	If you would like to make a donation for my work done on this MOD as well as other MODs, you may do so by going to the demo/test board (http://www.phpbbdevelopers.net/) and clicking the Donate button in the header. All donations are voluntary but appreciated.</author-notes>
 
 	<author-group>
 		<author>
@@ -93,22 +94,7 @@
 						'taw_quickreply'		=> array('lang' => 'TAW_QUICKREPLY',		'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true), ]]></action>
 		</edit>
 		<edit>
-			<find><![CDATA[/**
-	* Select bump interval
-	*/
-	function bump_interval($value, $key)
-	{
-		global $user;
-
-		$s_bump_type = '';
-		$types = array('m' => 'MINUTES', 'h' => 'HOURS', 'd' => 'DAYS');
-		foreach ($types as $type => $lang)
-		{
-			$selected = ($this->new_config['bump_type'] == $type) ? ' selected="selected"' : '';
-			$s_bump_type .= '<option value="' . $type . '"' . $selected . '>' . $user->lang[$lang] . '</option>';
-		}
-
-		return '<input id="' . $key . '" type="text" size="3" maxlength="4" name="config[bump_interval]" value="' . $value . '" />&nbsp;<select name="config[bump_type]">' . $s_bump_type . '</select>';
+			<find><![CDATA[return '<input id="' . $key . '" type="text" size="3" maxlength="4" name="config[bump_interval]" value="' . $value . '" />&nbsp;<select name="config[bump_type]">' . $s_bump_type . '</select>';
 	}]]></find>
 			<action type="after-add"><![CDATA[/**
 	* Select Topic Age Warning interval
