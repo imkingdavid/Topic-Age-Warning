@@ -31,6 +31,13 @@
 	</installation>
 	<history>
 		<entry>
+			<date>2010-10-26</date>
+			<rev-version>1.0.0</rev-version>
+			<changelog lang="en">
+				<change>[new] subSilver2 support (thanks DoYouSpeakWak)</change>
+			</changelog>
+		</entry>
+		<entry>
 			<date>2010-09-18</date>
 			<rev-version>1.0.0</rev-version>
 			<changelog lang="en">
@@ -77,6 +84,9 @@
 			</changelog>
 		</entry>
 	</history>
+	<link-group>
+		<link type="template" href="subsilver2.xml" lang="en">subSilver2 Template Edits</link>
+	</link-group>
 </header>
 
 <action-group>
