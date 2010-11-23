@@ -96,10 +96,10 @@ class taw
 	{
 		global $user;
 		$blocks = array( 
-			array('name' => 'year',		'amount' => $this->year), 
-			array('name' => 'month',	'amount' => $this->month),
-			array('name' => 'week',		'amount' => $this->week), 
-			array('name' => 'day',		'amount' => $this->day), 
+			array('name' => 'YEAR',		'amount' => $this->year), 
+			array('name' => 'MONTH',	'amount' => $this->month),
+			array('name' => 'WEEK',		'amount' => $this->week), 
+			array('name' => 'DAY',		'amount' => $this->day), 
 		);
 		$diff = abs($date1 - $date2); 
 		$levels = 2; // how specific to be; 1 = "1 year"; 2 = "1 year and 2 months"; 3 = "1 year and 2 months and 4 days"; etc.
@@ -114,20 +114,15 @@ class taw
 			if ($diff / $block['amount'] >= 1) 
 			{ 
 				$amount = floor($diff / $block['amount']); 
-				if ($amount > 1)
-				{
-					$plural='s';
-				}
-				else
-				{
-					$plural='';
-				} 
-				$result[] = $amount . ' ' . $block['name'] . $plural; 
+				$name = $block['name'];
+				$name .= ($amount == 1) ? '' : 'S';
+				$lang = $user->lang($name);
+				$result[] = $amount . ' ' . $lang; 
 				$diff -= $amount * $block['amount']; 
 				$current_level++; 
 			} 
 		} 
-		return implode(' ' . $user->lang['AND'] . ' ', $result); 
+		return strtolower(implode(' ' . $user->lang['AND'] . ' ', $result)); 
 	}
 	
 	function go_posting()

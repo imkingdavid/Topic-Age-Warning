@@ -152,7 +152,13 @@
 	'TAW_LAST_POST_EXPLAIN'			=> 'If \'Yes\', the old topics will be determined using the time of the last reply to the topic. If \'No\', old topics will be determined using the time of the topic\'s creation.',
 	'TAW_QUICKREPLY'				=> 'Allow quick reply (where enabled) in old topics',
 	'TAW_QUICKREPLY_EXPLAIN'		=> 'If \'Yes\', quick reply will still be usable in old topics (where enabled). If \'No\', quick reply will not show up in old topics, even if enabled in that forum.',
+	'DAY'							=> 'Day',
+	'DAYS'							=> 'Days',
+	'MONTH'							=> 'Month',
 	'MONTHS'						=> 'Months',
+	'WEEK'							=> 'Week',
+	'WEEKS'							=> 'Weeks',
+	'YEAR'							=> 'Year',
 	'YEARS'							=> 'Years',
 	//! END Topic Age Warning - imkingdavid]]></action>
 		</edit>
