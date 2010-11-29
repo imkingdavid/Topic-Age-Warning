@@ -76,11 +76,11 @@ class taw
 	function get_interval($interval_type = 'd', $interval_value = 0)
 	{
 		$interval = 0;
-		if($interval_type == 'y') // year
+		if ($interval_type == 'y') // year
 		{
 			$interval = $interval_value * $this->year;
 		}
-		elseif($interval_type == 'm') // month
+		else if ($interval_type == 'm') // month
 		{
 			$interval = $interval_value * $this->month;
 		}
@@ -102,7 +102,7 @@ class taw
 			array('name' => 'DAY',		'amount' => $this->day), 
 		);
 		$diff = abs($date1 - $date2); 
-		$levels = 2; // how specific to be; 1 = "1 year"; 2 = "1 year and 2 months"; 3 = "1 year and 2 months and 4 days"; etc.
+		$levels = 2; // how specific to be; 1 = "1 year"; 2 = "1 year and 2 months"; 3 = "1 year and 2 months and 1 week"; etc.
 		$current_level = 1; 
 		$result = array(); 
 		foreach($blocks as $block) 
@@ -114,10 +114,7 @@ class taw
 			if ($diff / $block['amount'] >= 1) 
 			{ 
 				$amount = floor($diff / $block['amount']); 
-				$name = $block['name'];
-				$name .= ($amount == 1) ? '' : 'S';
-				$lang = $user->lang($name);
-				$result[] = $amount . ' ' . $lang; 
+				$result[] = $amount . ' ' . $user->lang($block['name'] . (($amount == 1) ? '' : 'S'));
 				$diff -= $amount * $block['amount']; 
 				$current_level++; 
 			} 
@@ -138,7 +135,7 @@ class taw
 			$db->sql_query($sql);
 			$langkey .= '_LOCK';
 		}
-		$message = sprintf($user->lang[$langkey], $this->pretty_interval);
+		$message = sprintf($user->lang($langkey), $this->pretty_interval);
 		if($this->lock)
 		{
 			trigger_error($message);
