@@ -113,7 +113,9 @@ class taw
 			}
 			if ($diff / $block['amount'] >= 1) 
 			{ 
-				$amount = floor($diff / $block['amount']); 
+				$amount = floor($diff / $block['amount']);
+				//fix the plurals issue. instead of just adding "s" to the word, add it to the language key
+				// so that other languages that don't just add "s" can use their own plural words.
 				$result[] = $amount . ' ' . $user->lang($block['name'] . (($amount == 1) ? '' : 'S'));
 				$diff -= $amount * $block['amount']; 
 				$current_level++; 
@@ -135,7 +137,7 @@ class taw
 			$db->sql_query($sql);
 			$langkey .= '_LOCK';
 		}
-		$message = sprintf($user->lang($langkey), $this->pretty_interval);
+		$message = $user->lang($langkey, $this->pretty_interval);
 		if($this->lock)
 		{
 			trigger_error($message);
@@ -149,7 +151,7 @@ class taw
 	function go_viewtopic()
 	{
 		global $user, $template;
-		$message = sprintf($user->lang['TOPIC_AGE_WARNING'], $this->pretty_interval);
+		$message = $user->lang('TOPIC_AGE_WARNING', $this->pretty_interval);
 		//enable the warning
 		$template->assign_vars(array(
 			'S_TOPIC_AGE_WARNING'	=> true,
