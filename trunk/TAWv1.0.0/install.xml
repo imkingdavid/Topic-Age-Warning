@@ -27,9 +27,17 @@
 	<installation>
 		<level>intermediate</level>
 		<time>300</time>
-		<target-version>3.0.8</target-version>
+		<target-version>3.0.9</target-version>
 	</installation>
 	<history>
+		<entry>
+			<date>2011-07-14</date>
+			<rev-version>1.0.0</rev-version>
+			<changelog lang="en">
+				<change>[change] phpBB version 3.0.9</change>
+				<change>[change] UMIL updated</change>
+			</changelog>
+		</entry>
 		<entry>
 			<date>2010-11-23</date>
 			<rev-version>1.0.0</rev-version>
@@ -150,8 +158,7 @@
 	</open>
 	<open src="language/en/acp/board.php">
 		<edit>
-			<find><![CDATA[	'BUMP_INTERVAL'					=> 'Bump interval',
-	'BUMP_INTERVAL_EXPLAIN'			=> 'Number of minutes, hours or days between the last post to a topic and the ability to bump this topic. Setting the value to 0 disables this feature.',]]></find>
+			<find><![CDATA['TOPICS_PER_PAGE'				=> 'Topics per page',]]></find>
 			<action type="after-add"><![CDATA[//! Topic Age Warning - imkingdavid
 	'TOPIC_AGE_WARNING'				=> 'Topic Age Warning Settings',
 	'TAW_INTERVAL'					=> 'Topic Age Warning interval',

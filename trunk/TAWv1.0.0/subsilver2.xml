@@ -27,9 +27,17 @@
 	<installation>
 		<level>intermediate</level>
 		<time>300</time>
-		<target-version>3.0.8</target-version>
+		<target-version>3.0.9</target-version>
 	</installation>
 	<history>
+		<entry>
+			<date>2011-07-14</date>
+			<rev-version>1.0.0</rev-version>
+			<changelog lang="en">
+				<change>[change] phpBB version 3.0.9</change>
+				<change>[change] UMIL updated</change>
+			</changelog>
+		</entry>
 		<entry>
 			<date>2010-11-23</date>
 			<rev-version>1.0.0</rev-version>
