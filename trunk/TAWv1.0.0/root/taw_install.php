@@ -80,6 +80,12 @@ $options = array(
 */
 
 $versions = array(
+    '1.0.1' => array(
+        'config_add'    => array(
+            // how specific to display the interval, e.g. "X months and Y days" vs "X months"
+            array('taw_levels',         2), // default to 2 for continuity.
+        ),
+    ),
 	'1.0.0' => array(
 		'config_add'	=> array(
 			array('taw_interval',		0),

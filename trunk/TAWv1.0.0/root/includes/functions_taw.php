@@ -41,6 +41,7 @@ class taw
 		$this->week = $this->day * 7;
 		$this->month = $this->day * 30.436875; //30.436875 = average length of a month in days (according to wikipedia)
 		$this->year = $this->month * 12; // 12 months in the year
+        
 		$this->topic_id = $post_data['topic_id'];
 		$this->lock = $config['taw_lock'];
 		$this->quickreply = $config['taw_quickreply']; // Bool; true means show quickreply when enabled, but display warning. False means don't show autoreply in old topics.
@@ -91,9 +92,10 @@ class taw
 		return $interval;
 	}
 	
-	// METHOD STOLEN FROM http://php.net/manual/en/ref.datetime.php
+	// METHOD STOLEN (and adapted) FROM http://php.net/manual/en/ref.datetime.php
 	function compare_dates($date1, $date2) 
 	{
+        // just so you know, the word "levels" is used to refer to the types of time (i.e. year, month, week, day)
 		global $user;
 		$blocks = array( 
 			array('name' => 'YEAR',		'amount' => $this->year), 
@@ -102,26 +104,32 @@ class taw
 			array('name' => 'DAY',		'amount' => $this->day), 
 		);
 		$diff = abs($date1 - $date2); 
-		$levels = 2; // how specific to be; 1 = "1 year"; 2 = "1 year and 2 months"; 3 = "1 year and 2 months and 1 week"; etc.
-		$current_level = 1; 
+        // @todo: make this dynamic
+		$levels = get_config('taw_levels');
+        // how specific to be; 1 = "1 year"; 2 = "1 year and 2 months"; 3 = "1 year and 2 months and 1 week"; etc.
+        $levels = (empty($levels) || $levels > count($blocks)) ? 2 : $levels; // Note that $levels should not be be more than the value of count($blocks), which at the moment is 4.
+        // Levels are omitted if their value is 0. So if there are no years, it will skip years instead of saying "0 years and 1 month"
+    	$current_level = 1; // start at level 1; the level is incremented at the end of the loop 
 		$result = array(); 
 		foreach($blocks as $block) 
 		{ 
 			if ($current_level > $levels)
 			{
-				break;
+				break; // stop the loop
 			}
+            // if there are 1 or more of a level
 			if ($diff / $block['amount'] >= 1) 
 			{ 
 				$amount = floor($diff / $block['amount']);
 				//fix the plurals issue. instead of just adding "s" to the word, add it to the language key
-				// so that other languages that don't just add "s" can use their own plural words.
-				$result[] = $amount . ' ' . $user->lang($block['name'] . (($amount == 1) ? '' : 'S'));
-				$diff -= $amount * $block['amount']; 
-				$current_level++; 
-			} 
-		} 
-		return strtolower(implode(' ' . $user->lang['AND'] . ' ', $result)); 
+				// so that other languages that don't just add "s" can use their own plural words
+                // Instead, just add the S to the language key to access the plural language value
+				$result[] = $amount . ' ' . $user->lang($block['name'] . (($amount > 1) ? 'S' : ''));
+				$diff -= $amount * $block['amount'];
+				$current_level++;
+			}
+		}
+		return strtolower(implode(' ' . $user->lang['AND'] . ' ', $result));
 	}
 	
 	function go_posting()
